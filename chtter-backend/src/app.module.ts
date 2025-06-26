@@ -20,6 +20,7 @@ import { UsersModule } from './users/users.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
+      playground: false, // disable default playground
     }),
     DatabaseModule,
     UsersModule,
