@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import * as argon2 from 'argon2';
+
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UsersRepository } from './users.repository';
@@ -7,23 +9,43 @@ import { UsersRepository } from './users.repository';
 export class UsersService {
   constructor(private readonly users: UsersRepository) {}
 
-  create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user';
+  private async hashPassword(password: string) {
+    const hashedPassword = await argon2.hash(password);
+    return hashedPassword;
+  }
+
+  async create(createUserInput: CreateUserInput) {
+    const hashedPassword = await this.hashPassword(createUserInput.password);
+
+    return this.users.create({
+      ...createUserInput,
+      password: hashedPassword,
+    });
   }
 
   async findAll() {
     return await this.users.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(_id: string) {
+    return this.users.findOne({ _id });
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  async update(_id: string, updateUserInput: UpdateUserInput) {
+    return this.users.findOneAndUpdate(
+      { _id },
+      {
+        $set: {
+          ...updateUserInput,
+          ...(updateUserInput.password
+            ? { password: await this.hashPassword(updateUserInput.password) }
+            : {}),
+        },
+      },
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(_id: string) {
+    return this.users.findOneAndDelete({ _id });
   }
 }
