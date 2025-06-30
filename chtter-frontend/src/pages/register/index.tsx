@@ -26,7 +26,7 @@ const RegisterPage = () => {
       },
     });
   };
-  console.log(errors)
+
   return (
     <form onSubmit={handleSubmit(handleOnSubmit)}>
       <h2 className="card-title mb-3">Register</h2>
