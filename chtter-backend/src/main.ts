@@ -3,6 +3,7 @@ import { altairExpress } from 'altair-express-middleware';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
+import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 
@@ -20,6 +21,8 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.useLogger(app.get(Logger));
+
+  app.use(cookieParser());
 
   app.use(
     '/altair',

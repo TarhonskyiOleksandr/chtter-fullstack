@@ -1,0 +1,34 @@
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
+import { JwtService } from '@nestjs/jwt';
+
+import { type JWTPayload } from './types/jwt-payload.interface';
+import { User } from 'src/users/entities/user.entity';
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  async login(user: User, res: Response) {
+    const expires = new Date();
+    expires.setSeconds(
+      expires.getSeconds() + +this.configService.getOrThrow('JWT_EXP'),
+    );
+
+    const payload: JWTPayload = {
+      _id: user._id.toHexString(),
+      email: user.email,
+    };
+
+    const token = this.jwtService.sign(payload);
+
+    res.cookie('access-token', token, {
+      httpOnly: true,
+      expires,
+    });
+  }
+}
