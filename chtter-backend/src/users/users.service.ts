@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as argon2 from 'argon2';
 
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UsersRepository } from './users.repository';
+import { verify } from 'argon2';
 
 @Injectable()
 export class UsersService {
@@ -47,5 +48,19 @@ export class UsersService {
 
   async remove(_id: string) {
     return this.users.findOneAndDelete({ _id });
+  }
+
+  async verifyUser(email: string, password: string) {
+    const user = await this.users.findOne({ email });
+    const isPasswordMatch = await verify(user.password, password);
+
+    if (!isPasswordMatch)
+      throw new UnauthorizedException('Invalid credentials');
+
+    return {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    };
   }
 }
