@@ -1,9 +1,9 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useCreateUser } from '@/features';
 import { registerSchema, type RegisterFormData } from './types';
+import { extractErrorMessage } from '@/shared/utils';
 
 const RegisterPage = () => {
   const [createUser] = useCreateUser();
@@ -11,25 +11,41 @@ const RegisterPage = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setError,
+    clearErrors,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
 
   const handleOnSubmit = async ({ name, email, password }: RegisterFormData) => {
-    await createUser({
-      variables: {
-        createUserInput: {
-          name,
-          email,
-          password,
+    try {
+      await createUser({
+        variables: {
+          createUserInput: {
+            name,
+            email,
+            password,
+          },
         },
-      },
-    });
+      });
+      clearErrors('root');
+    } catch(err) {
+      const message = extractErrorMessage(err);
+      console.log(err)
+      if (message) {
+        setError('root', { message });
+      }
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(handleOnSubmit)}>
       <h2 className="card-title mb-3">Register</h2>
+      {errors.root && (
+        <div className="alert alert-error mb-4">
+          <span>{errors.root.message}</span>
+        </div>
+      )}
       <div className="form-control w-full">
         <input 
           placeholder="Name" 
