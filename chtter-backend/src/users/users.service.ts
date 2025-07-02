@@ -1,10 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as argon2 from 'argon2';
+import { verify } from 'argon2';
 
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UsersRepository } from './users.repository';
-import { verify } from 'argon2';
+import { handleMongoError } from 'src/common/helpers';
 
 @Injectable()
 export class UsersService {
@@ -16,12 +17,16 @@ export class UsersService {
   }
 
   async create(createUserInput: CreateUserInput) {
-    const hashedPassword = await this.hashPassword(createUserInput.password);
+    try {
+      const hashedPassword = await this.hashPassword(createUserInput.password);
 
-    return this.users.create({
-      ...createUserInput,
-      password: hashedPassword,
-    });
+      return await this.users.create({
+        ...createUserInput,
+        password: hashedPassword,
+      });
+    } catch (err: any) {
+      throw handleMongoError(err);
+    }
   }
 
   async findAll() {
