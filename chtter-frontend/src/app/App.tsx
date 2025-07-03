@@ -5,6 +5,7 @@ import RegisterPage from '@/pages/register';
 import { AuthLayout } from '@/app/layouts';
 import { ApolloProvider } from '@apollo/client';
 import client from './graphql/apollo-client';
+import Home from '@/pages/home';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<AuthLayout />}>
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Route>
