@@ -1,3 +1,4 @@
+import type { User } from '@/entities';
 import { gql, useQuery } from '@apollo/client';
 
 const ME_QUERY = gql`
@@ -11,5 +12,5 @@ const ME_QUERY = gql`
 `
 
 export const useGetMe = () => {
-  return useQuery(ME_QUERY);
+  return useQuery<{ me: User }>(ME_QUERY);
 };
