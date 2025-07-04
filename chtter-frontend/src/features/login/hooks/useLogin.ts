@@ -1,6 +1,6 @@
 import type { UseFormSetError } from 'react-hook-form';
 
-import client from '@/app/graphql/apollo-client';
+import { client } from '@/shared/api/graphql';
 
 interface LoginRequest {
   email: string;
@@ -19,6 +19,7 @@ export const useLogin = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(req),
       }
     );
