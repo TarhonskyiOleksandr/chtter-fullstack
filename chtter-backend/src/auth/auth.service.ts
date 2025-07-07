@@ -32,4 +32,11 @@ export class AuthService {
       expires,
     });
   }
+
+  async logout(response: Response) {
+    response.cookie('access-token', '', {
+      httpOnly: true,
+      expires: new Date(),
+    });
+  }
 }
