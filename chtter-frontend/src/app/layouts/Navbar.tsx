@@ -6,13 +6,13 @@ import { useLogout } from '@/features';
 import { client } from '@/shared/api/graphql';
 import { isAuthenticated } from '@/shared/constatnts';
 import { useReactiveVar } from '@apollo/client';
+import { Avatar } from '@/shared/ui';
 
 export const Navbar: React.FC = () => {
   const { data } = useGetMe();
   const { logout } = useLogout();
   const navigate = useNavigate();
   const authenticated = useReactiveVar(isAuthenticated);
-  const firstLetter = data?.me.name?.charAt(0)?.toUpperCase() || '?';
 
   const handleLogout = async() => {
     await logout();
@@ -34,13 +34,9 @@ export const Navbar: React.FC = () => {
 
         <div className="flex-none">
           <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 h-10 rounded-full bg-neutral text-neutral-content flex items-center justify-center">
-                <span className="text-lg font-bold">
-                  {firstLetter}
-                </span>
-              </div>
-            </label>
+            <div tabIndex={0} className="cursor-pointer">
+              <Avatar name={ data?.me.name || ''} /> 
+            </div>
             <ul
               tabIndex={0}
               className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"

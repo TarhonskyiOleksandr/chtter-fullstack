@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 
 import { loginSchema, type LoginFormData } from './types';
 import { useLogin } from '@/features';
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
   const {
@@ -45,7 +46,13 @@ const LoginPage = () => {
           {...register('password')}
         />
       </FormField>
-      <div className="card-actions justify-end">
+      <div className="card-actions justify-between items-center">
+        <p className="text-sm">
+          Don't have an account?{' '}
+          <Link to="/register" className="text-primary">
+            Register
+          </Link>.
+        </p>
         <button 
           className="btn btn-primary"
           disabled={isSubmitting}
