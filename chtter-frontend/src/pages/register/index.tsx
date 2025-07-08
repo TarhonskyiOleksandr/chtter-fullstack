@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateUser } from '@/features';
 import { registerSchema, type RegisterFormData } from './types';
 import { extractErrorMessage } from '@/shared/utils';
+import { Link } from 'react-router-dom';
 
 const RegisterPage = () => {
   const [createUser] = useCreateUser();
@@ -83,7 +84,13 @@ const RegisterPage = () => {
             <span className="label-text-alt text-error">{errors.password.message}</span>
           </label>
         )}
-        <div className="card-actions justify-end mt-4">
+        <div className="card-actions justify-between items-center">
+          <p className="text-sm">
+            Already registered?{' '}
+            <Link to="/login" className="text-primary">
+              Login
+            </Link>.
+          </p>
           <button 
             type="submit" 
             className="btn btn-primary"
