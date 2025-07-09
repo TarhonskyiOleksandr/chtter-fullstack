@@ -6,7 +6,7 @@ interface AvatarProps {
 export const Avatar = ({ name, avatar }: AvatarProps) => {
   return (
     <div className="avatar avatar-placeholder">
-      <div className="bg-neutral text-neutral-content rounded-full w-12">
+      <div className="bg-neutral text-neutral-content rounded-full w-9 md:w-11">
         {
           avatar ?
           <img src={avatar} alt={name} />
