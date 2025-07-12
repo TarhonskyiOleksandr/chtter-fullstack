@@ -1,7 +1,7 @@
-import type { User } from '@/entities';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import { graphql } from '@/shared/api/graphql';
 
-const ME_QUERY = gql`
+const getMeDocument = graphql(`
   query Me {
     me {
       _id,
@@ -9,8 +9,8 @@ const ME_QUERY = gql`
       email
     }
   }
-`
+`);
 
 export const useGetMe = () => {
-  return useQuery<{ me: User }>(ME_QUERY);
+  return useQuery(getMeDocument);
 };
