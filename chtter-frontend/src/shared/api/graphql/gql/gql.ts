@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as types from './graphql';
-import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 
 /**
  * Map of all GraphQL operations in the project.
@@ -15,10 +15,12 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 type Documents = {
     "\n  query Me {\n    me {\n      _id,\n      name,\n      email\n    }\n  }\n": typeof types.MeDocument,
+    "\n  mutation CreateChat($createChatInput: CreateChatInput!) {\n    createChat(createChatInput: $createChatInput) {\n      _id,\n      name,\n      userId,\n      userIds,\n      isPrivate\n    }\n  }\n": typeof types.CreateChatDocument,
     "\n  mutation CreateUser($createUserInput: CreateUserInput!) {\n    createUser(createUserInput: $createUserInput) {\n      _id,\n      name,\n      email\n    }\n  }\n": typeof types.CreateUserDocument,
 };
 const documents: Documents = {
     "\n  query Me {\n    me {\n      _id,\n      name,\n      email\n    }\n  }\n": types.MeDocument,
+    "\n  mutation CreateChat($createChatInput: CreateChatInput!) {\n    createChat(createChatInput: $createChatInput) {\n      _id,\n      name,\n      userId,\n      userIds,\n      isPrivate\n    }\n  }\n": types.CreateChatDocument,
     "\n  mutation CreateUser($createUserInput: CreateUserInput!) {\n    createUser(createUserInput: $createUserInput) {\n      _id,\n      name,\n      email\n    }\n  }\n": types.CreateUserDocument,
 };
 
@@ -40,6 +42,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Me {\n    me {\n      _id,\n      name,\n      email\n    }\n  }\n"): (typeof documents)["\n  query Me {\n    me {\n      _id,\n      name,\n      email\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreateChat($createChatInput: CreateChatInput!) {\n    createChat(createChatInput: $createChatInput) {\n      _id,\n      name,\n      userId,\n      userIds,\n      isPrivate\n    }\n  }\n"): (typeof documents)["\n  mutation CreateChat($createChatInput: CreateChatInput!) {\n    createChat(createChatInput: $createChatInput) {\n      _id,\n      name,\n      userId,\n      userIds,\n      isPrivate\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
