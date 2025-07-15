@@ -1,3 +1,4 @@
+import { useGetChats } from '@/features';
 import ChatListItem from './ChatListItem';
 
 interface ChatSidebarProps {
@@ -5,6 +6,9 @@ interface ChatSidebarProps {
 }
 
 const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
+  const { data } = useGetChats();
+
+  console.log(data)
   return (
     <aside className="h-full border-r border-base-300">
       <div className="p-4 font-bold text-lg border-b border-base-300">
