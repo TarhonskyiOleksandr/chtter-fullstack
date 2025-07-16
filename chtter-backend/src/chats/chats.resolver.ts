@@ -1,4 +1,5 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
 
 import { ChatsService } from './chats.service';
 import { Chat } from './entities/chat.entity';
@@ -6,12 +7,14 @@ import { CreateChatInput } from './dto/create-chat.input';
 import { UpdateChatInput } from './dto/update-chat.input';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JWTPayload } from 'src/auth/types/jwt-payload.interface';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 
 @Resolver(() => Chat)
 export class ChatsResolver {
   constructor(private readonly chatsService: ChatsService) {}
 
   @Mutation(() => Chat)
+  @UseGuards(GqlAuthGuard)
   createChat(
     @Args('createChatInput') createChatInput: CreateChatInput,
     @CurrentUser() user: JWTPayload,
