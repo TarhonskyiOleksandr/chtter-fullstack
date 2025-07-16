@@ -1,16 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 
 import { Modal, type ModalProps, FormField } from '@/shared/ui';
 import { useCreateChat } from '../hooks/useCreateChat';
-
-const createChatSchema = z.object({
-  isPrivate: z.boolean(),
-  name: z.string().optional(),
-});
-
-type CreateChatFormData = z.infer<typeof createChatSchema>;
+import { createChatSchema, type CreateChatFormData } from '../types';
 
 type CreateChatModalProps = Omit<ModalProps, "children">;
 
