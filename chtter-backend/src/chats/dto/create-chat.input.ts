@@ -11,7 +11,6 @@ import {
 @InputType()
 export class CreateChatInput {
   @Field()
-  @Transform(({ value }) => value === 'true')
   @IsBoolean()
   isPrivate: boolean;
 
@@ -21,9 +20,8 @@ export class CreateChatInput {
   @IsOptional()
   userIds?: string[];
 
-  @Field({ nullable: true })
-  @IsNotEmpty()
+  @Transform(({ value }) => value?.trim())
   @IsString()
-  @IsOptional()
-  name?: string;
+  @IsNotEmpty()
+  name: string;
 }
