@@ -11,23 +11,38 @@ const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
   const { data } = useGetChats();
   const [isCreateChatOpen, setCreateChatOpen] = useState(false);
 
-  console.log(data)
   return (
-    <aside className="h-full border-r border-base-300">
+    <aside className="h-full border-r border-base-300 flex flex-col">
       <div className="p-4 font-bold text-lg border-b border-base-300">
         Messages
       </div>
-      <button 
-        className="btn" 
-        onClick={() => setCreateChatOpen(true)}
-      >
-        Create chat
-      </button>
-      <ChatListItem
-        name="John Doe"
-        lastMessage="Let's catch up later today?"
-        onClick={onSelectChat}
-      />
+      
+      <div className="p-2">
+        <button 
+          className="btn w-full" 
+          onClick={() => setCreateChatOpen(true)}
+        >
+          Create chat
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto">
+        {data?.chats.map((chat) => (
+          <ChatListItem
+            key={chat._id}
+            name={chat.name || ''}
+            lastMessage="Message"
+            onClick={onSelectChat}
+          />
+        ))}
+
+        <ChatListItem
+          name="John Doe"
+          lastMessage="Let's catch up later today?"
+          onClick={onSelectChat}
+        />
+      </div>
+
       <CreateChatModal 
         isOpen={isCreateChatOpen}
         onClose={() => setCreateChatOpen(false)}
