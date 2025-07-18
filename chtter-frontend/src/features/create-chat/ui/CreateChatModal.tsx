@@ -14,6 +14,7 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = (props) => {
     formState: { errors, isSubmitting },
     setError,
     clearErrors,
+    reset,
   } = useForm<CreateChatFormData>({
     resolver: zodResolver(createChatSchema),
     defaultValues: {
@@ -32,6 +33,7 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = (props) => {
           createChatInput: data,
         },
       });
+      reset();
       props.onClose();
     } catch (err) {
       console.log(err);
