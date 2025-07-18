@@ -11,21 +11,19 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = (props) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
     setError,
     clearErrors,
+    reset,
   } = useForm<CreateChatFormData>({
     resolver: zodResolver(createChatSchema),
     defaultValues: {
-      isPrivate: true,
+      isPrivate: false,
       name: '',
     },
   });
 
   const [createChat] = useCreateChat();
-
-  const isPrivate = watch('isPrivate');
 
   const onSubmit = async (data: CreateChatFormData) => {
     clearErrors('root');
@@ -35,6 +33,7 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = (props) => {
           createChatInput: data,
         },
       });
+      reset();
       props.onClose();
     } catch (err) {
       console.log(err);
@@ -62,15 +61,13 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = (props) => {
           </label>
         </div>
 
-        {!isPrivate && (
-          <FormField error={errors.name?.message}>
-            <input
-              placeholder="Chat name"
-              className={`input input-bordered w-full ${errors.name ? "input-error" : ""}`}
-              {...register("name")}
-            />
-          </FormField>
-        )}
+        <FormField error={errors.name?.message}>
+          <input
+            placeholder="Chat name"
+            className={`input input-bordered w-full ${errors.name ? "input-error" : ""}`}
+            {...register("name")}
+          />
+        </FormField>
 
         <button
           type="submit"

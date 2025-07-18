@@ -20,12 +20,12 @@ export const useCreateChat = () => {
       cache.modify({
         fields: {
           chats(existingChats = []) {
-            const newChat = cache.writeFragment({
+            const newChatRef = cache.writeFragment({
               data: data?.createChat,
               fragment: ChatFragment,
             });
 
-            return [...existingChats, newChat];
+            return [newChatRef, ...existingChats];
           }
         }
       })
