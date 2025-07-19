@@ -6,6 +6,8 @@ import Home from '@/pages/home';
 import AuthLayout from './layouts/AuthLayout';
 import { Protected } from './layouts/Protected';
 import { ApolloProvider } from '@/shared/api/graphql';
+import ChatsLayout from './layouts/ChatsLayout';
+import ChatView from '@/pages/chat/ChatView';
 
 export default function App() {
   return (
@@ -13,7 +15,10 @@ export default function App() {
       <ApolloProvider>
         <Routes>
           <Route element={<Protected />}>
-            <Route path="/" element={<Home />} />
+            <Route element={<ChatsLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/chats/:id" element={<ChatView />} />
+            </Route>
           </Route>
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<LoginPage />} />

@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
 import { CreateChatModal, useGetChats } from '@/features';
 import ChatListItem from './ChatListItem';
 
 interface ChatSidebarProps {
-  onSelectChat: () => void;
+  onSelectChat: (val: any) => void;
 }
 
 const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
@@ -29,18 +30,12 @@ const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
       <div className="flex-1 overflow-y-auto">
         {data?.chats.map((chat) => (
           <ChatListItem
+            {...chat}
             key={chat._id}
-            name={chat.name || ''}
             lastMessage="Message"
             onClick={onSelectChat}
           />
         ))}
-
-        <ChatListItem
-          name="John Doe"
-          lastMessage="Let's catch up later today?"
-          onClick={onSelectChat}
-        />
       </div>
 
       <CreateChatModal 

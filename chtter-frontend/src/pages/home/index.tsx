@@ -1,10 +1,8 @@
-import ChatLayout from "./ChatLayout";
-
 const Home = () => {
   return (
-    <ChatLayout>
+    <div>
       Home
-    </ChatLayout>
+    </div>
   );
 };
 

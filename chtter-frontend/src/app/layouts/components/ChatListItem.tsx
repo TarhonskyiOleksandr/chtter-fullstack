@@ -1,18 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Chat } from "@/shared/api/graphql/gql/graphql";
 import { Avatar } from "@/shared/ui";
 
-interface ChatListItemProps {
-  name: string;
+interface ChatListItemProps extends Chat {
   lastMessage: string;
-  onClick?: () => void;
+  onClick: (val: any) => void;
 }
 
-const ChatListItem = ({ name, lastMessage, onClick }: ChatListItemProps) => {
+const ChatListItem = ({ name, lastMessage, onClick, _id }: ChatListItemProps) => {
   return (
     <div
-      onClick={onClick}
+      onClick={() => onClick(_id)}
       className="flex items-center gap-3 px-4 py-3 hover:bg-base-200 cursor-pointer"
     >
-      <Avatar name={name} />
+      <Avatar name={name!} />
       <div className="min-w-0">
         <p className="font-semibold truncate">{name}</p>
         <p className="text-sm text-gray-500 truncate">{lastMessage}</p>
