@@ -14,6 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  query Chat($_id: String!) {\n    chat(_id: $_id) {\n      ...ChatFragment\n    }\n  }\n": typeof types.ChatDocument,
     "\n  query Me {\n    me {\n      _id,\n      name,\n      email\n    }\n  }\n": typeof types.MeDocument,
     "\n  mutation CreateChat($createChatInput: CreateChatInput!) {\n    createChat(createChatInput: $createChatInput) {\n      _id,\n      name,\n      userId,\n      userIds,\n      isPrivate\n    }\n  }\n": typeof types.CreateChatDocument,
     "\n  mutation CreateUser($createUserInput: CreateUserInput!) {\n    createUser(createUserInput: $createUserInput) {\n      _id,\n      name,\n      email\n    }\n  }\n": typeof types.CreateUserDocument,
@@ -21,6 +22,7 @@ type Documents = {
     "\n  fragment ChatFragment on Chat {\n    _id,\n    name,\n    userId,\n    userIds,\n    isPrivate\n  }  \n": typeof types.ChatFragmentFragmentDoc,
 };
 const documents: Documents = {
+    "\n  query Chat($_id: String!) {\n    chat(_id: $_id) {\n      ...ChatFragment\n    }\n  }\n": types.ChatDocument,
     "\n  query Me {\n    me {\n      _id,\n      name,\n      email\n    }\n  }\n": types.MeDocument,
     "\n  mutation CreateChat($createChatInput: CreateChatInput!) {\n    createChat(createChatInput: $createChatInput) {\n      _id,\n      name,\n      userId,\n      userIds,\n      isPrivate\n    }\n  }\n": types.CreateChatDocument,
     "\n  mutation CreateUser($createUserInput: CreateUserInput!) {\n    createUser(createUserInput: $createUserInput) {\n      _id,\n      name,\n      email\n    }\n  }\n": types.CreateUserDocument,
@@ -42,6 +44,10 @@ const documents: Documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Chat($_id: String!) {\n    chat(_id: $_id) {\n      ...ChatFragment\n    }\n  }\n"): (typeof documents)["\n  query Chat($_id: String!) {\n    chat(_id: $_id) {\n      ...ChatFragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

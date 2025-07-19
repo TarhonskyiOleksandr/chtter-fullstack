@@ -1,12 +1,16 @@
 import { useState } from 'react';
-import ChatSidebar from './ChatSidebar';
+import { Outlet, useNavigate } from 'react-router-dom';
 
-interface ChatLayoutProps {
-  children: React.ReactNode;
-}
+import ChatSidebar from './components/ChatSidebar';
 
-const ChatLayout = ({ children }: ChatLayoutProps) => {
+const ChatLayout = () => {
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const handleSelectChat = (id: string) => {
+    setShowSidebar(false);
+    navigate(`chats/${id}`);
+  };
 
   return (
     <div className="flex h-screen">
@@ -15,7 +19,7 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
           showSidebar ? 'block' : 'hidden sm:block'
         }`}
       >
-        <ChatSidebar onSelectChat={() => setShowSidebar(false)} />
+        <ChatSidebar onSelectChat={handleSelectChat} />
       </div>
 
       <main
@@ -31,7 +35,7 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
             Open
           </button>
         </div>
-        {children}
+        <Outlet />
       </main>
     </div>
   );
