@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import ChatSidebar from './components/ChatSidebar';
+import { SendMessageBar } from '@/features';
 
 const ChatLayout = () => {
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
@@ -13,7 +14,7 @@ const ChatLayout = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <div
         className={`w-full sm:w-72 sm:block ${
           showSidebar ? 'block' : 'hidden sm:block'
@@ -24,8 +25,8 @@ const ChatLayout = () => {
 
       <main
         className={`flex-1 ${
-          showSidebar ? 'hidden' : 'block'
-        } sm:block overflow-y-auto`}
+          showSidebar ? 'hidden' : 'flex'
+        } sm:flex flex-col`}
       >
         <div className="sm:hidden p-2">
           <button
@@ -35,7 +36,14 @@ const ChatLayout = () => {
             Open
           </button>
         </div>
-        <Outlet />
+
+        <div className="flex-1 overflow-y-auto p-4">
+          <Outlet />
+        </div>
+
+        <div className="p-2">
+          <SendMessageBar />
+        </div>
       </main>
     </div>
   );

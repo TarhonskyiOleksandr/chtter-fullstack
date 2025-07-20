@@ -17,9 +17,9 @@ export const Protected = () => {
   if (!data?.me) return <Navigate to="/login" />;
 
   return (
-    <>
+    <div className="grid grid-rows-[auto_1fr] h-screen">
       <Navbar />
       <Outlet />
-    </>
+    </div>
   );
 };
