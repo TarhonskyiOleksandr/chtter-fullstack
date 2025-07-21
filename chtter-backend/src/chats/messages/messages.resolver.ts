@@ -1,0 +1,23 @@
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
+
+import { MessagesService } from './messages.service';
+import { Message } from './entities/message.entity';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
+import { CreateMessageInput } from './dto/create-message.input';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { JWTPayload } from 'src/auth/types/jwt-payload.interface';
+
+@Resolver()
+export class MessagesResolver {
+  constructor(private readonly messagesService: MessagesService) {}
+
+  @Mutation(() => Message)
+  @UseGuards(GqlAuthGuard)
+  async createMutation(
+    @Args('createMessageInput') messageInput: CreateMessageInput,
+    @CurrentUser() user: JWTPayload,
+  ) {
+    return await this.messagesService.createMessage(messageInput, user._id);
+  }
+}
