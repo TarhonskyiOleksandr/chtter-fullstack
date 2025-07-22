@@ -14,7 +14,7 @@ export class MessagesResolver {
 
   @Mutation(() => Message)
   @UseGuards(GqlAuthGuard)
-  async createMutation(
+  async createMessage(
     @Args('createMessageInput') messageInput: CreateMessageInput,
     @CurrentUser() user: JWTPayload,
   ) {

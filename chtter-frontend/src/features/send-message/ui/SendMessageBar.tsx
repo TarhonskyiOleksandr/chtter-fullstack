@@ -1,8 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
+import { useCreateMessage } from '../hooks/useCreateMessage';
 
 export const SendMessageBar = () => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const [createMessage] = useCreateMessage();
+  const { id } = useParams();
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -23,6 +28,12 @@ export const SendMessageBar = () => {
     if (!message.trim()) return;
     console.log('Send message:', message);
     setMessage('');
+    createMessage({ variables: {
+      createMessageInput: {
+        content: message,
+        chatId: id!,
+      },
+    }})
   };
 
   return (
@@ -41,6 +52,7 @@ export const SendMessageBar = () => {
         <button
           type="button"
           onClick={handleSend}
+          disabled={!message}
           aria-label="Send message"
           className="btn btn-neutral btn-circle"
         >
