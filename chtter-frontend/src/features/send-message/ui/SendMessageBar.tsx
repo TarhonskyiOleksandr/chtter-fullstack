@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom';
 import { useCreateMessage } from '../hooks/useCreateMessage';
 
 export const SendMessageBar = () => {
+  const { id } = useParams();
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [createMessage] = useCreateMessage();
-  const { id } = useParams();
+  const [createMessage] = useCreateMessage(id!);
 
   useEffect(() => {
     if (textareaRef.current) {

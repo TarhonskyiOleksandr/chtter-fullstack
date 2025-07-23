@@ -12,7 +12,13 @@ export const MessagesList = () => {
 
   return (
     <div>
-      
+      {
+        data?.messages.map((message) => 
+          <p key={message._id}>
+            {message.content}
+          </p>
+        )
+      }
     </div>
   );
-}
+};
