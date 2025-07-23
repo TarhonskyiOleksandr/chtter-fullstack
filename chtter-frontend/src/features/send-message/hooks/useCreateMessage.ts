@@ -4,9 +4,7 @@ import { useMutation } from '@apollo/client';
 const CREATE_MESSAGE = graphql(`
   mutation CreateMessage($createMessageInput: CreateMessageInput!) {
     createMessage(createMessageInput: $createMessageInput) {
-      _id,
-      content,
-      createdAt,
+      ...MessageFragment
     }
   }
 `);

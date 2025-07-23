@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import { useGetChat } from '@/entities';
+import { MessagesList, useGetChat } from '@/entities';
 
 const ChatView = () => {
   const { id } = useParams();
@@ -14,6 +14,7 @@ const ChatView = () => {
   return (
     <div>
       {data?.chat.name}
+      <MessagesList />
     </div>
   );
 }

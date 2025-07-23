@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { MessagesService } from './messages.service';
 import { Message } from './entities/message.entity';
@@ -7,6 +7,7 @@ import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 import { CreateMessageInput } from './dto/create-message.input';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JWTPayload } from 'src/auth/types/jwt-payload.interface';
+import { GetMessagesArgs } from './dto/get-messages.args';
 
 @Resolver()
 export class MessagesResolver {
@@ -19,5 +20,14 @@ export class MessagesResolver {
     @CurrentUser() user: JWTPayload,
   ) {
     return await this.messagesService.createMessage(messageInput, user._id);
+  }
+
+  @Query(() => [Message], { name: 'messages' })
+  @UseGuards(GqlAuthGuard)
+  async getMessages(
+    @Args() getMessagesArgs: GetMessagesArgs,
+    @CurrentUser() user: JWTPayload,
+  ) {
+    return await this.messagesService.getMessages(getMessagesArgs, user._id);
   }
 }
