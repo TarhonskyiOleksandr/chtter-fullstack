@@ -20,6 +20,7 @@ export class CreateChatInput {
   @IsOptional()
   userIds?: string[];
 
+  @Field()
   @Transform(({ value }) => value?.trim())
   @IsString()
   @IsNotEmpty()
