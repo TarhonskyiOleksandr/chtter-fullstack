@@ -25,6 +25,9 @@ export class Chat extends AbstractEntity {
 
   @Prop([Message])
   messages: Message[];
+
+  @Prop()
+  lastMessageAt: Date;
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat);

@@ -5,13 +5,14 @@ import { Avatar } from "@/shared/ui";
 interface ChatListItemProps extends Chat {
   lastMessage: string;
   onClick: (val: any) => void;
+  isActive?: boolean;
 }
 
-const ChatListItem = ({ name, lastMessage, onClick, _id }: ChatListItemProps) => {
+const ChatListItem = ({ name, lastMessage, onClick, _id, isActive }: ChatListItemProps) => {
   return (
     <div
       onClick={() => onClick(_id)}
-      className="flex items-center gap-3 px-4 py-3 hover:bg-base-200 cursor-pointer"
+      className={`flex items-center gap-3 px-4 py-3 hover:bg-base-200 cursor-pointer ${isActive ? 'bg-base-200' : 'bg-transparent'}`}
     >
       <Avatar name={name!} />
       <div className="min-w-0">

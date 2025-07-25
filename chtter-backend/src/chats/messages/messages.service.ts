@@ -37,6 +37,7 @@ export class MessagesService {
         ...this.currentUserChatFilter(userId),
       },
       {
+        $set: { lastMessageAt: new Date() },
         $push: {
           messages: message,
         },

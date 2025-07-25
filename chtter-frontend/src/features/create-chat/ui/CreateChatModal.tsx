@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router-dom';
 
 import { Modal, type ModalProps, FormField } from '@/shared/ui';
 import { useCreateChat } from '../hooks/useCreateChat';
@@ -22,18 +23,19 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = (props) => {
       name: '',
     },
   });
-
+  const navigate = useNavigate();
   const [createChat] = useCreateChat();
 
   const onSubmit = async (data: CreateChatFormData) => {
     clearErrors('root');
     try {
-      await createChat({
+      const chat = await createChat({
         variables: {
           createChatInput: data,
         },
       });
       reset();
+      navigate(`/chats/${chat.data?.createChat._id}`);
       props.onClose();
     } catch (err) {
       console.log(err);

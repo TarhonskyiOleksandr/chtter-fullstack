@@ -29,6 +29,7 @@ export type Chat = {
 
 export type CreateChatInput = {
   isPrivate: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
   userIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
@@ -120,6 +121,7 @@ export type QueryUserArgs = {
 export type UpdateChatInput = {
   id: Scalars['Int']['input'];
   isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
   userIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 

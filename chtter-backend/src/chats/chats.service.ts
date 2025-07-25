@@ -14,11 +14,12 @@ export class ChatsService {
       userId,
       userIds: createChatInput.userIds || [],
       messages: [],
+      lastMessageAt: new Date(),
     });
   }
 
   async findAll() {
-    return await this.chatsRepository.find({});
+    return await this.chatsRepository.find({}, { lastMessageAt: -1 });
   }
 
   async findOne(_id: string) {
