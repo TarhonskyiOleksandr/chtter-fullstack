@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { CreateChatModal, useGetChats } from '@/features';
 import ChatListItem from './ChatListItem';
+import { useParams } from 'react-router-dom';
 
 interface ChatSidebarProps {
   onSelectChat: (val: any) => void;
@@ -10,6 +11,7 @@ interface ChatSidebarProps {
 
 const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
   const { data } = useGetChats();
+  const { id } = useParams();
   const [isCreateChatOpen, setCreateChatOpen] = useState(false);
 
   return (
@@ -34,6 +36,7 @@ const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
             key={chat._id}
             lastMessage="Message"
             onClick={onSelectChat}
+            isActive={id === chat._id}
           />
         ))}
       </div>
