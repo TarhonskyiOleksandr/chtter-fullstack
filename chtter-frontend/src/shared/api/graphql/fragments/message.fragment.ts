@@ -5,5 +5,6 @@ export const MessageFragment = graphql(`
     _id,
     content,
     createdAt,
+    userId
   }
 `);

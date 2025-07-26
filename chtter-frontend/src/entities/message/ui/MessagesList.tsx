@@ -1,23 +1,43 @@
 import { useParams } from 'react-router-dom';
+
 import { useGetMessages } from '../hooks/useGetMessages';
+import Message from './Message';
+import { useGetMe } from '@/entities';
 
 export const MessagesList = () => {
   const { id } = useParams();
   const { data, loading, error } = useGetMessages({ chatId: id! });
+  const { data: meData } = useGetMe();
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error</p>
 
-  console.log(data)
-
   return (
-    <div>
+    <div className="px-6 lg:px-12">
       {
-        data?.messages.map((message) => 
-          <p key={message._id}>
-            {message.content}
-          </p>
-        )
+        data?.messages.map((message, index, self) => {
+          const currentDate = new Date(message.createdAt).toLocaleDateString('en-US');
+          const prevDate = self[index - 1]
+            ? new Date(self[index - 1].createdAt).toLocaleDateString('en-US')
+            : null;
+
+          const shouldShowDate = currentDate !== prevDate;
+
+          return (
+            <div key={message._id}>
+              {shouldShowDate && (
+                <div className="flex justify-center mb-2">
+                  <time className="text-xs text-gray-400">{currentDate}</time>
+                </div>
+              )}
+              <Message
+                content={message.content}
+                isMyMessage={message.userId === meData?.me._id}
+                createdAt={message.createdAt}
+              />
+            </div>
+          );
+        })
       }
     </div>
   );
