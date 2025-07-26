@@ -13,7 +13,7 @@ export const MessagesList = () => {
   if (error) return <p>Error</p>
 
   return (
-    <div className="px-6 lg:px-12">
+    <>
       {
         data?.messages.map((message, index, self) => {
           const currentDate = new Date(message.createdAt).toLocaleDateString('en-US');
@@ -39,6 +39,6 @@ export const MessagesList = () => {
           );
         })
       }
-    </div>
+    </>
   );
 };
