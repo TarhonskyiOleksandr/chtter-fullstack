@@ -1,14 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
 import { CreateMessageInput } from './dto/create-message.input';
 import { ChatsRepository } from '../chats.repository';
 import { Message } from './entities/message.entity';
 import { GetMessagesArgs } from './dto/get-messages.args';
+import { PUB_SUB } from 'src/common/injection-tokens';
+import { MESSAGE_CREATED } from './constants/pubsub-triggers';
 
 @Injectable()
 export class MessagesService {
-  constructor(private readonly chatsRepository: ChatsRepository) {}
+  constructor(
+    private readonly chatsRepository: ChatsRepository,
+    @Inject(PUB_SUB) private readonly pubSub: PubSub,
+  ) {}
 
   private currentUserChatFilter(userId: string) {
     return {
@@ -27,6 +33,7 @@ export class MessagesService {
     const message: Message = {
       _id: new Types.ObjectId(),
       userId,
+      chatId,
       content,
       createdAt: new Date(),
     };
@@ -43,6 +50,8 @@ export class MessagesService {
         },
       },
     );
+
+    await this.pubSub.publish(MESSAGE_CREATED, { messageCreated: message });
 
     return message;
   }
