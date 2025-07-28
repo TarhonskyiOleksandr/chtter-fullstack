@@ -37,6 +37,8 @@
     "cookie-parser": "^1.4.7",
     "express-graphiql": "^1.0.0",
     "graphql": "^16.11.0",
+    "graphql-subscriptions": "^3.0.0",
+    "graphql-ws": "^6.0.6",
     "joi": "^17.13.3",
     "migrate-mongo": "^12.1.3",
     "mongodb": "^6.17.0",
