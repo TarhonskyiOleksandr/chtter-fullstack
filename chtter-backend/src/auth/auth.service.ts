@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
 import { type JWTPayload } from './types/jwt-payload.interface';
@@ -38,5 +38,14 @@ export class AuthService {
       httpOnly: true,
       expires: new Date(),
     });
+  }
+
+  verifyWs(request: Request): JWTPayload {
+    const cookies: string[] = request.headers.cookie.split('; ');
+    const authCookie = cookies.find((cookie) =>
+      cookie.includes('access-token'),
+    );
+    const jwt = authCookie.split('access-token=')[1];
+    return this.jwtService.verify(jwt);
   }
 }
