@@ -3,14 +3,18 @@ import { useParams } from 'react-router-dom';
 import { useGetMessages } from '../hooks/useGetMessages';
 import Message from './Message';
 import { useGetMe } from '@/entities';
+import { useSendMessage } from '@/features';
 
 export const MessagesList = () => {
   const { id } = useParams();
   const { data, loading, error } = useGetMessages({ chatId: id! });
   const { data: meData } = useGetMe();
+  const { data: lastMessages } = useSendMessage({ chatId: id! });
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error</p>
+
+  console.log(lastMessages)
 
   return (
     <>
