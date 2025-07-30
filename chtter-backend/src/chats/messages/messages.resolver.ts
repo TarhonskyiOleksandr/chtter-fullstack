@@ -10,7 +10,6 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JWTPayload } from 'src/auth/types/jwt-payload.interface';
 import { GetMessagesArgs } from './dto/get-messages.args';
 import { PUB_SUB } from 'src/common/injection-tokens';
-import { MESSAGE_CREATED } from './constants/pubsub-triggers';
 import { MessageCreatedArgs } from './dto/message-created.args';
 
 @Resolver()
@@ -47,8 +46,10 @@ export class MessagesResolver {
       );
     },
   })
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  messageCreated(@Args() _messageCreatedArgs: MessageCreatedArgs) {
-    return this.pubSub.asyncIterableIterator(MESSAGE_CREATED);
+  messageCreated(
+    @Args() messageCreatedArgs: MessageCreatedArgs,
+    @CurrentUser() user: JWTPayload,
+  ) {
+    return this.messagesService.messageCreated(messageCreatedArgs, user._id);
   }
 }
