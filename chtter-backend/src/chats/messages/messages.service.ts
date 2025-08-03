@@ -47,12 +47,15 @@ export class MessagesService {
   }
 
   async getMessages({ chatId }: GetMessagesArgs, userId: string) {
-    return (
-      await this.chatsRepository.findOne({
-        _id: chatId,
-        ...this.chatsService.currentUserChatFilter(userId),
-      })
-    ).messages;
+    const chat = await this.chatsRepository.findOne({
+      _id: chatId,
+      ...this.chatsService.currentUserChatFilter(userId),
+    });
+
+    return chat.messages.sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
   }
 
   async messageCreated({ chatId }: MessageCreatedArgs, userId: string) {
