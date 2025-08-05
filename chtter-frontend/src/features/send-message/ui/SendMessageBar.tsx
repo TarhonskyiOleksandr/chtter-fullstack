@@ -7,7 +7,7 @@ export const SendMessageBar = () => {
   const { id } = useParams();
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [createMessage] = useCreateMessage(id!);
+  const [createMessage] = useCreateMessage();
 
   useEffect(() => {
     if (textareaRef.current) {
