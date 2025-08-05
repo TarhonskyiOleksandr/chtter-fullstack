@@ -12,23 +12,14 @@ export const MessagesList = () => {
   const { id } = useParams();
   const { data: existingMessages, loading, error } = useGetMessages({ chatId: id! });
   const { data: meData } = useGetMe();
-  const { data: lastMessages } = useSendMessage({ chatId: id! });
+  useSendMessage({ chatId: id! });
 
   useEffect(() => {
     if (existingMessages) setMessages(existingMessages.messages);
   }, [existingMessages]);
 
-  useEffect(() => {
-    const lastExistingMessageId = messages[messages.length - 1]?._id;
-    if (lastMessages && lastMessages.messageCreated._id !== lastExistingMessageId) {
-      setMessages((prev) => [...prev, lastMessages.messageCreated])
-    }
-  }, [lastMessages, messages])
-
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error</p>
-
-  console.log(lastMessages)
 
   return (
     <>
