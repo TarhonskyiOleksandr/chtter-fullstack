@@ -4,16 +4,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateUser } from '@/features';
 import { registerSchema, type RegisterFormData } from './types';
 import { extractErrorMessage } from '@/shared/utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
   const [createUser] = useCreateUser();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
-    clearErrors,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
@@ -29,10 +29,9 @@ const RegisterPage = () => {
           },
         },
       });
-      clearErrors('root');
+      navigate('/login')
     } catch(err) {
       const message = extractErrorMessage(err);
-      console.log(err)
       if (message) {
         setError('root', { message });
       }
