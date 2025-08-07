@@ -26,9 +26,7 @@ export class ChatsService {
     return await this.chatsRepository.create({
       ...createChatInput,
       userId,
-      userIds: createChatInput.userIds || [],
       messages: [],
-      lastMessageAt: new Date(),
     });
   }
 
