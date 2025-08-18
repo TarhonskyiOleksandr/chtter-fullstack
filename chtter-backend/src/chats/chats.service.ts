@@ -8,19 +8,19 @@ import { ChatsRepository } from './chats.repository';
 export class ChatsService {
   constructor(private readonly chatsRepository: ChatsRepository) {}
 
-  currentUserChatFilter(userId: string) {
-    return {
-      $or: [
-        { userId },
-        {
-          userIds: {
-            $in: [userId],
-          },
-        },
-        { isPrivate: false },
-      ],
-    };
-  }
+  // currentUserChatFilter(userId: string) {
+  //   return {
+  //     $or: [
+  //       { userId },
+  //       {
+  //         userIds: {
+  //           $in: [userId],
+  //         },
+  //       },
+  //       { isPrivate: false },
+  //     ],
+  //   };
+  // }
 
   async create(createChatInput: CreateChatInput, userId: string) {
     return await this.chatsRepository.create({
@@ -30,11 +30,8 @@ export class ChatsService {
     });
   }
 
-  async findAll(userId: string) {
-    return await this.chatsRepository.find(
-      { ...this.currentUserChatFilter(userId) },
-      { lastMessageAt: -1 },
-    );
+  async findAll() {
+    return await this.chatsRepository.find({}, { lastMessageAt: -1 });
   }
 
   async findOne(_id: string) {

@@ -19,7 +19,7 @@ export class MessagesResolver {
   async createMessage(
     @Args('createMessageInput') messageInput: CreateMessageInput,
     @CurrentUser() user: JWTPayload,
-  ) {
+  ): Promise<Message> {
     return await this.messagesService.createMessage(messageInput, user._id);
   }
 
@@ -27,9 +27,8 @@ export class MessagesResolver {
   @UseGuards(GqlAuthGuard)
   async getMessages(
     @Args() getMessagesArgs: GetMessagesArgs,
-    @CurrentUser() user: JWTPayload,
-  ) {
-    return await this.messagesService.getMessages(getMessagesArgs, user._id);
+  ): Promise<Message[]> {
+    return await this.messagesService.getMessages(getMessagesArgs);
   }
 
   @Subscription(() => Message, {
@@ -41,10 +40,7 @@ export class MessagesResolver {
       );
     },
   })
-  messageCreated(
-    @Args() messageCreatedArgs: MessageCreatedArgs,
-    @CurrentUser() user: JWTPayload,
-  ) {
-    return this.messagesService.messageCreated(messageCreatedArgs, user._id);
+  messageCreated(@Args() messageCreatedArgs: MessageCreatedArgs) {
+    return this.messagesService.messageCreated(messageCreatedArgs);
   }
 }
