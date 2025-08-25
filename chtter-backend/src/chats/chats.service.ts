@@ -47,7 +47,7 @@ export class ChatsService {
     ]);
 
     chats.forEach((chat) => {
-      if (chat.latestMessage._id) return delete chat.latestMessage;
+      if (!chat.latestMessage._id) return delete chat.latestMessage;
 
       chat.latestMessage.user = chat.latestMessage.user[0];
       delete chat.latestMessage.userId;
@@ -59,10 +59,10 @@ export class ChatsService {
 
   async findOne(_id: string) {
     const chats = await this.findMany([
-      { $match: { chatId: new Types.ObjectId(_id) } },
+      { $match: { _id: new Types.ObjectId(_id) } },
     ]);
 
-    if (chats[0]) throw new NotFoundException('Chat is not found');
+    if (!chats[0]) throw new NotFoundException('Chat is not found');
 
     return chats[0];
   }

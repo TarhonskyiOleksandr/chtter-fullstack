@@ -68,7 +68,7 @@ export class MessagesService {
           as: 'user',
         },
       },
-      { $unwind: 'user' },
+      { $unwind: '$user' },
       { $unset: 'userId' },
       { $set: { chatId } },
     ]);
