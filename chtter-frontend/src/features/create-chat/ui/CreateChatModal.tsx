@@ -19,7 +19,6 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = (props) => {
   } = useForm<CreateChatFormData>({
     resolver: zodResolver(createChatSchema),
     defaultValues: {
-      isPrivate: false,
       name: '',
     },
   });
@@ -51,17 +50,6 @@ export const CreateChatModal: React.FC<CreateChatModalProps> = (props) => {
             <span>{errors.root.message}</span>
           </div>
         )}
-
-        <div className="form-control">
-          <label className="label cursor-pointer justify-start gap-4">
-            <input
-              type="checkbox"
-              className="checkbox"
-              {...register("isPrivate")}
-            />
-            <span className="label-text">Private chat</span>
-          </label>
-        </div>
 
         <FormField error={errors.name?.message}>
           <input

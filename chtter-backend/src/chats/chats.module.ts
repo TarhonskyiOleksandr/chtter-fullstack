@@ -5,16 +5,15 @@ import { ChatsResolver } from './chats.resolver';
 import { ChatsRepository } from './chats.repository';
 import { DatabaseModule } from 'src/common/database/database.module';
 import { MessagesModule } from './messages/messages.module';
-import { ChatDocument, ChatSchema } from './entities/chat.document';
+import { ChatSchema } from './entities/chat.document';
+import { Chat } from './entities/chat.entity';
 
 @Module({
   imports: [
-    DatabaseModule.forFeature([
-      { name: ChatDocument.name, schema: ChatSchema },
-    ]),
+    DatabaseModule.forFeature([{ name: Chat.name, schema: ChatSchema }]),
     forwardRef(() => MessagesModule),
   ],
   providers: [ChatsResolver, ChatsService, ChatsRepository],
-  exports: [ChatsRepository, ChatsService],
+  exports: [ChatsRepository],
 })
 export class ChatsModule {}

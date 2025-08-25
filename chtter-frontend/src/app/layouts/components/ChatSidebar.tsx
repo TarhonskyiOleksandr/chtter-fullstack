@@ -13,7 +13,7 @@ const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
   const { data } = useGetChats();
   const { id } = useParams();
   const [isCreateChatOpen, setCreateChatOpen] = useState(false);
-
+  console.log(data)
   return (
     <aside className="h-full border-r border-base-300 flex flex-col">
       <div className="p-4 font-bold text-lg border-b border-base-300">
@@ -32,9 +32,8 @@ const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
       <div className="flex-1 overflow-y-auto">
         {data?.chats.map((chat) => (
           <ChatListItem
-            {...chat}
             key={chat._id}
-            lastMessage="Message"
+            chat={chat}
             onClick={onSelectChat}
             isActive={id === chat._id}
           />

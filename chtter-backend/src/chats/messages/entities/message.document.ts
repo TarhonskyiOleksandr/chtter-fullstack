@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
 import { AbstractEntity } from 'src/common/database/abstract.entity';
@@ -14,5 +14,3 @@ export class MessageDocument extends AbstractEntity {
   @Prop()
   createdAt: Date;
 }
-
-export const MessageSchema = SchemaFactory.createForClass(MessageDocument);
