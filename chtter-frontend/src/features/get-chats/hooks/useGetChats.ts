@@ -1,7 +1,7 @@
 import { graphql } from "@/shared/api/graphql";
 import { useQuery } from "@apollo/client";
 
-const getChatsDocument = graphql(`
+export const GET_CHATS = graphql(`
   query Chats {
     chats {
       ...ChatFragment
@@ -10,5 +10,5 @@ const getChatsDocument = graphql(`
 `);
 
 export const useGetChats = () => {
-  return useQuery(getChatsDocument);
+  return useQuery(GET_CHATS);
 };
