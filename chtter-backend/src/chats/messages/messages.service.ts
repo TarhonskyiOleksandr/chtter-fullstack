@@ -7,7 +7,6 @@ import { ChatsRepository } from '../chats.repository';
 import { GetMessagesArgs } from './dto/get-messages.args';
 import { PUB_SUB } from 'src/common/injection-tokens';
 import { MESSAGE_CREATED } from './constants/pubsub-triggers';
-import { MessageCreatedArgs } from './dto/message-created.args';
 import { MessageDocument } from './entities/message.document';
 import { Message } from './entities/message.entity';
 import { UsersService } from 'src/users/users.service';
@@ -79,10 +78,7 @@ export class MessagesService {
     );
   }
 
-  async messageCreated({ chatId }: MessageCreatedArgs) {
-    await this.chatsRepository.findOne({
-      _id: chatId,
-    });
+  async messageCreated() {
     return this.pubSub.asyncIterableIterator(MESSAGE_CREATED);
   }
 }

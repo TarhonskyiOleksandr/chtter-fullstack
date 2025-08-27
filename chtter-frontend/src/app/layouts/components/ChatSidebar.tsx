@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 
-import { CreateChatModal, useGetChats } from '@/features';
+import { CreateChatModal, useGetChats, useSendMessage } from '@/features';
 import ChatListItem from './ChatListItem';
 import { useParams } from 'react-router-dom';
 
@@ -13,7 +13,8 @@ const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
   const { data } = useGetChats();
   const { id } = useParams();
   const [isCreateChatOpen, setCreateChatOpen] = useState(false);
-  console.log(data)
+  useSendMessage({ chatIds: data?.chats.map((chat) => chat._id) || [] });
+
   return (
     <aside className="h-full border-r border-base-300 flex flex-col">
       <div className="p-4 font-bold text-lg border-b border-base-300">

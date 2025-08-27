@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useGetMessages } from '../hooks/useGetMessages';
 import Message from './Message';
 import { useGetMe } from '@/entities';
-import { useSendMessage } from '@/features';
 import type { Message as MessageType } from '@/shared/api/graphql/gql/graphql';
 
 export const MessagesList = () => {
@@ -12,14 +11,13 @@ export const MessagesList = () => {
   const { id } = useParams();
   const { data: existingMessages, loading, error } = useGetMessages({ chatId: id! });
   const { data: meData } = useGetMe();
-  useSendMessage({ chatId: id! });
 
   useEffect(() => {
     if (existingMessages) setMessages(existingMessages.messages);
   }, [existingMessages]);
 
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error</p>
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error</p>;
 
   return (
     <>
@@ -41,7 +39,7 @@ export const MessagesList = () => {
               )}
               <Message
                 content={message.content}
-                isMyMessage={message.userId === meData?.me._id}
+                isMyMessage={message.user._id === meData?.me._id}
                 createdAt={message.createdAt}
               />
             </div>

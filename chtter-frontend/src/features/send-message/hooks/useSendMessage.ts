@@ -5,8 +5,8 @@ import type { SubscriptionMessageCreatedArgs } from '@/shared/api/graphql/gql/gr
 import { updateMessages } from '../utils';
 
 const MESSAGE_CREATED = graphql(`
-  subscription messageCreated($chatId: String!) {
-    messageCreated(chatId: $chatId) {
+  subscription messageCreated($chatIds: [String!]!) {
+    messageCreated(chatIds: $chatIds) {
       ...MessageFragment
     }
   }
