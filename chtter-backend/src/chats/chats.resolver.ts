@@ -8,6 +8,7 @@ import { UpdateChatInput } from './dto/update-chat.input';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JWTPayload } from 'src/auth/types/jwt-payload.interface';
 import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
+import { PaginationArgs } from 'src/common/dto/pagination-args';
 
 @Resolver(() => Chat)
 export class ChatsResolver {
@@ -24,8 +25,8 @@ export class ChatsResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query(() => [Chat], { name: 'chats' })
-  async findAll(): Promise<Chat[]> {
-    return this.chatsService.findMany();
+  async findAll(@Args() paginationArgs: PaginationArgs): Promise<Chat[]> {
+    return this.chatsService.findMany([], paginationArgs);
   }
 
   @Query(() => Chat, { name: 'chat' })

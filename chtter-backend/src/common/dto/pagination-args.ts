@@ -3,7 +3,7 @@ import { ArgsType, Field, Int } from '@nestjs/graphql';
 @ArgsType()
 export class PaginationArgs {
   @Field(() => Int)
-  skip: number;
+  offset: number;
 
   @Field(() => Int)
   limit: number;
