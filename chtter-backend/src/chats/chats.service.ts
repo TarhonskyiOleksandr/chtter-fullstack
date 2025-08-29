@@ -4,6 +4,7 @@ import { PipelineStage, Types } from 'mongoose';
 import { CreateChatInput } from './dto/create-chat.input';
 import { UpdateChatInput } from './dto/update-chat.input';
 import { ChatsRepository } from './chats.repository';
+import { PaginationArgs } from 'src/common/dto/pagination-args';
 
 @Injectable()
 export class ChatsService {
@@ -31,11 +32,27 @@ export class ChatsService {
     });
   }
 
-  async findMany(prePipelineStages: PipelineStage[] = []) {
+  async findMany(
+    prePipelineStages: PipelineStage[] = [],
+    paginationArgs?: PaginationArgs,
+  ) {
     const chats = await this.chatsRepository.model.aggregate([
       ...prePipelineStages,
-      { $set: { latestMessage: { $arrayElemAt: ['$messages', -1] } } },
+      {
+        $set: {
+          latestMessage: {
+            $coud: [
+              '$messages',
+              { $arrayElemAt: ['$messages', -1] },
+              { createdAt: new Date() },
+            ],
+          },
+        },
+      },
       { $unset: 'messages' },
+      { $sort: { 'latestMessage.createdAt': -1 } },
+      { $skip: paginationArgs.offset },
+      { $limit: paginationArgs.limit },
       {
         $lookup: {
           from: 'users',
@@ -73,5 +90,9 @@ export class ChatsService {
 
   remove(id: number) {
     return `This action removes a #${id} chat`;
+  }
+
+  countChats() {
+    return this.chatsRepository.model.countDocuments({});
   }
 }
