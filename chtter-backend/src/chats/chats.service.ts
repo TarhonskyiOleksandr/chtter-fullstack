@@ -41,7 +41,7 @@ export class ChatsService {
       {
         $set: {
           latestMessage: {
-            $coud: [
+            $cond: [
               '$messages',
               { $arrayElemAt: ['$messages', -1] },
               { createdAt: new Date() },
@@ -49,10 +49,10 @@ export class ChatsService {
           },
         },
       },
-      { $unset: 'messages' },
       { $sort: { 'latestMessage.createdAt': -1 } },
       { $skip: paginationArgs.offset },
       { $limit: paginationArgs.limit },
+      { $unset: 'messages' },
       {
         $lookup: {
           from: 'users',
