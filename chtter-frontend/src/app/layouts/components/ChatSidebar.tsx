@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { CreateChatModal, useGetChats, useSendMessage } from '@/features';
 import ChatListItem from './ChatListItem';
 import type { Chat } from '@/shared/api/graphql/gql/graphql';
+import InfiniteScroll from 'react-infinite-scroller';
+import { useCountChats } from '@/entities';
 
 interface ChatSidebarProps {
   onSelectChat: (val: any) => void;
@@ -19,10 +21,16 @@ const sortChats = (chatA: Chat, chatB: Chat) => {
 };
 
 const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
-  const { data } = useGetChats();
+  const { data, fetchMore } = useGetChats({ offset: 0, limit: 8 });
   const { id } = useParams();
   const [isCreateChatOpen, setCreateChatOpen] = useState(false);
+
   useSendMessage({ chatIds: data?.chats.map((chat) => chat._id) || [] });
+  const { chatsCount, countChats } = useCountChats();
+
+  useEffect(() => {
+    countChats();
+  }, [countChats]);
 
   return (
     <aside className="h-full border-r border-base-300 flex flex-col">
@@ -40,14 +48,25 @@ const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {data?.chats ? [...data.chats].sort(sortChats).map((chat) => (
-          <ChatListItem
-            key={chat._id}
-            chat={chat}
-            onClick={onSelectChat}
-            isActive={id === chat._id}
-          />
-        )) : null}
+        <InfiniteScroll
+          pageStart={0}
+          hasMore={data?.chats && chatsCount ? data.chats.length < chatsCount : false}
+          loadMore={() => fetchMore({
+            variables: {
+              offset: data?.chats.length,
+            }
+          })}
+          useWindow={false}
+        >
+          {data?.chats ? [...data.chats].sort(sortChats).map((chat) => (
+            <ChatListItem
+              key={chat._id}
+              chat={chat}
+              onClick={onSelectChat}
+              isActive={id === chat._id}
+            />
+          )) : null}
+        </InfiniteScroll>
       </div>
 
       <CreateChatModal 
