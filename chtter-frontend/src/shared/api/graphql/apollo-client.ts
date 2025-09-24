@@ -43,7 +43,27 @@ const splitLink = split(
 
 const client = new ApolloClient({
   link: from([errorLink, splitLink]),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          chats: {
+            keyArgs: false,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            merge: (existing, incoming, { args }: any) => {
+              const merged = existing ? [...existing] : [];
+
+              for (let i = 0; i < incoming?.length; i++) {
+                merged[args.offset + i] = incoming[i];
+              }
+
+              return merged;
+            }
+          },
+        },
+      },
+    },
+  }),
 });
 
 export { setNavigate, client };
