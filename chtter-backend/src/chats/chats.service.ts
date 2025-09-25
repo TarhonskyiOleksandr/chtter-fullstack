@@ -50,8 +50,8 @@ export class ChatsService {
         },
       },
       { $sort: { 'latestMessage.createdAt': -1 } },
-      { $skip: paginationArgs.offset },
-      { $limit: paginationArgs.limit },
+      { $skip: paginationArgs?.offset ?? 0 },
+      { $limit: paginationArgs?.limit ?? 10 },
       { $unset: 'messages' },
       {
         $lookup: {
