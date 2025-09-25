@@ -4,7 +4,16 @@ export const useCountChats = () => {
   const [chatsCount, setChatsCount] = useState<number | undefined>();
 
   const countChats = useCallback(async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/chats/count`);
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/chats/count`,
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
     if (!res.ok) return console.log(res);
 
