@@ -7,7 +7,7 @@ export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
   @Get('count')
-  // @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard)
   async countChats() {
     return this.chatsService.countChats();
   }

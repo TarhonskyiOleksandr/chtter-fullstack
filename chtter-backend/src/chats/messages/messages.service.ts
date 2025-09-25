@@ -54,11 +54,14 @@ export class MessagesService {
     return message;
   }
 
-  async getMessages({ chatId }: GetMessagesArgs) {
+  async getMessages({ chatId, offset, limit }: GetMessagesArgs) {
     const messages = await this.chatsRepository.model.aggregate([
       { $match: { _id: new Types.ObjectId(chatId) } },
       { $unwind: '$messages' },
       { $replaceRoot: { newRoot: '$messages' } },
+      { $sort: { createdAt: -1 } },
+      { $skip: offset ?? 0 },
+      { $limit: limit ?? 10 },
       {
         $lookup: {
           from: 'users',
@@ -80,5 +83,15 @@ export class MessagesService {
 
   async messageCreated() {
     return this.pubSub.asyncIterableIterator(MESSAGE_CREATED);
+  }
+
+  async countMessages(chatId: string) {
+    return (
+      await await this.chatsRepository.model.aggregate([
+        { $match: { _id: new Types.ObjectId(chatId) } },
+        { $unwind: '$messages' },
+        { $count: 'messages' },
+      ])
+    )[0];
   }
 }
