@@ -16,7 +16,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
 type Documents = {
     "\n  query Chat($_id: String!) {\n    chat(_id: $_id) {\n      ...ChatFragment\n    }\n  }\n": typeof types.ChatDocument,
     "\n  query Me {\n    me {\n      _id,\n      name,\n      email\n    }\n  }\n": typeof types.MeDocument,
-    "\n  query Messages($chatId: String!) {\n    messages(chatId: $chatId) {\n      ...MessageFragment\n    }\n  }\n": typeof types.MessagesDocument,
+    "\n  query Messages($chatId: String!, $offset: Int!, $limit: Int!) {\n    messages(chatId: $chatId, offset: $offset, limit: $limit) {\n      ...MessageFragment\n    }\n  }\n": typeof types.MessagesDocument,
     "\n  mutation CreateChat($createChatInput: CreateChatInput!) {\n    createChat(createChatInput: $createChatInput) {\n      ...ChatFragment\n    }\n  }\n": typeof types.CreateChatDocument,
     "\n  mutation CreateUser($createUserInput: CreateUserInput!) {\n    createUser(createUserInput: $createUserInput) {\n      _id,\n      name,\n      email\n    }\n  }\n": typeof types.CreateUserDocument,
     "\n  query Chats($offset: Int!, $limit: Int!) {\n    chats(offset: $offset, limit: $limit) {\n      ...ChatFragment\n    }\n  }\n": typeof types.ChatsDocument,
@@ -28,7 +28,7 @@ type Documents = {
 const documents: Documents = {
     "\n  query Chat($_id: String!) {\n    chat(_id: $_id) {\n      ...ChatFragment\n    }\n  }\n": types.ChatDocument,
     "\n  query Me {\n    me {\n      _id,\n      name,\n      email\n    }\n  }\n": types.MeDocument,
-    "\n  query Messages($chatId: String!) {\n    messages(chatId: $chatId) {\n      ...MessageFragment\n    }\n  }\n": types.MessagesDocument,
+    "\n  query Messages($chatId: String!, $offset: Int!, $limit: Int!) {\n    messages(chatId: $chatId, offset: $offset, limit: $limit) {\n      ...MessageFragment\n    }\n  }\n": types.MessagesDocument,
     "\n  mutation CreateChat($createChatInput: CreateChatInput!) {\n    createChat(createChatInput: $createChatInput) {\n      ...ChatFragment\n    }\n  }\n": types.CreateChatDocument,
     "\n  mutation CreateUser($createUserInput: CreateUserInput!) {\n    createUser(createUserInput: $createUserInput) {\n      _id,\n      name,\n      email\n    }\n  }\n": types.CreateUserDocument,
     "\n  query Chats($offset: Int!, $limit: Int!) {\n    chats(offset: $offset, limit: $limit) {\n      ...ChatFragment\n    }\n  }\n": types.ChatsDocument,
@@ -63,7 +63,7 @@ export function graphql(source: "\n  query Me {\n    me {\n      _id,\n      nam
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Messages($chatId: String!) {\n    messages(chatId: $chatId) {\n      ...MessageFragment\n    }\n  }\n"): (typeof documents)["\n  query Messages($chatId: String!) {\n    messages(chatId: $chatId) {\n      ...MessageFragment\n    }\n  }\n"];
+export function graphql(source: "\n  query Messages($chatId: String!, $offset: Int!, $limit: Int!) {\n    messages(chatId: $chatId, offset: $offset, limit: $limit) {\n      ...MessageFragment\n    }\n  }\n"): (typeof documents)["\n  query Messages($chatId: String!, $offset: Int!, $limit: Int!) {\n    messages(chatId: $chatId, offset: $offset, limit: $limit) {\n      ...MessageFragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

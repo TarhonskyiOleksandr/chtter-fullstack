@@ -9,6 +9,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { onError } from '@apollo/client/link/error';
 import { createClient } from 'graphql-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { merge } from './utils';
 
 let navigateCallback: ((path: string) => void) | null = null;
 
@@ -49,16 +50,11 @@ const client = new ApolloClient({
         fields: {
           chats: {
             keyArgs: false,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            merge: (existing, incoming, { args }: any) => {
-              const merged = existing ? [...existing] : [];
-
-              for (let i = 0; i < incoming?.length; i++) {
-                merged[args.offset + i] = incoming[i];
-              }
-
-              return merged;
-            }
+            merge,
+          },
+          messages: {
+            keyArgs: ['chatId'],
+            merge,
           },
         },
       },
