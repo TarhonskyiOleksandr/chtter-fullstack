@@ -5,12 +5,30 @@ import { useGetMessages } from '../hooks/useGetMessages';
 import Message from './Message';
 import { useGetMe } from '@/entities';
 import type { Message as MessageType } from '@/shared/api/graphql/gql/graphql';
+import { useCountMessages } from '../hooks/useCountMessages';
+import InfiniteScroll from 'react-infinite-scroller';
+
+const PAGE_SIZE = 10;
 
 export const MessagesList = () => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const { id } = useParams();
-  const { data: existingMessages, loading, error } = useGetMessages({ chatId: id! });
+  const { 
+    data: existingMessages, 
+    loading, 
+    error,
+    fetchMore,
+  } = useGetMessages({ 
+    chatId: id!,
+    offset: 0,
+    limit: PAGE_SIZE,
+  });
   const { data: meData } = useGetMe();
+  const { messagesCount, countMessages } = useCountMessages(id!);
+
+  useEffect(() => {
+    countMessages();
+  }, [countMessages]);
 
   useEffect(() => {
     if (existingMessages) setMessages(existingMessages.messages);
@@ -20,7 +38,26 @@ export const MessagesList = () => {
   if (error) return <p>Error</p>;
 
   return (
-    <>
+    <InfiniteScroll
+      isReverse
+      pageStart={0}
+      hasMore={
+        existingMessages?.messages && messagesCount ? 
+        existingMessages.messages.length < messagesCount 
+        : false
+      }
+      loadMore={() =>
+        fetchMore({
+          variables: {
+            offset: existingMessages?.messages.length,
+            limit: PAGE_SIZE,
+          },
+        })
+      }
+      initialLoad={false}
+      useWindow={false}
+      loader={<div className="p-4 text-center">Loading...</div>}
+    >
       {
         messages.map((message, index, self) => {
           const currentDate = new Date(message.createdAt).toLocaleDateString('en-US');
@@ -46,6 +83,6 @@ export const MessagesList = () => {
           );
         }).reverse()
       }
-    </>
+    </InfiniteScroll>
   );
 };

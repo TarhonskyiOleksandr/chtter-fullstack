@@ -4,8 +4,8 @@ import { graphql } from '@/shared/api/graphql';
 import type { MessagesQueryVariables } from '@/shared/api/graphql/gql/graphql';
 
 export const GET_MESSAGES = graphql(`
-  query Messages($chatId: String!) {
-    messages(chatId: $chatId) {
+  query Messages($chatId: String!, $offset: Int!, $limit: Int!) {
+    messages(chatId: $chatId, offset: $offset, limit: $limit) {
       ...MessageFragment
     }
   }
