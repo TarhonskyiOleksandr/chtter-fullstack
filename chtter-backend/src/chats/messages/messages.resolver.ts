@@ -36,9 +36,8 @@ export class MessagesResolver {
     filter: (payload, variables: MessageCreatedArgs, context) => {
       const userId = context.req.user._id;
       const message: Message = payload.messageCreated;
-
       return (
-        variables.chatIds.includes(message._id.toHexString()) &&
+        variables.chatIds.includes(message.chatId) &&
         userId !== message.user._id.toHexString()
       );
     },

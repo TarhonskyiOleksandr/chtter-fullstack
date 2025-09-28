@@ -7,12 +7,11 @@ import ChatListItem from './ChatListItem';
 import type { Chat } from '@/shared/api/graphql/gql/graphql';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useCountChats } from '@/entities';
+import { MESSAGES_PAGE_SIZE } from '@/shared/constatnts';
 
 interface ChatSidebarProps {
   onSelectChat: (val: any) => void;
 }
-
-const PAGE_SIZE = 9;
 
 const sortChats = (chatA: Chat, chatB: Chat) => {
   if (!chatA.latestMessage) return -1;
@@ -22,7 +21,7 @@ const sortChats = (chatA: Chat, chatB: Chat) => {
 };
 
 const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
-  const { data, fetchMore } = useGetChats({ offset: 0, limit: PAGE_SIZE });
+  const { data, fetchMore } = useGetChats({ offset: 0, limit: MESSAGES_PAGE_SIZE });
   const { id } = useParams();
   const [isCreateChatOpen, setCreateChatOpen] = useState(false);
 
@@ -56,7 +55,7 @@ const ChatSidebar = ({ onSelectChat }: ChatSidebarProps) => {
             fetchMore({
               variables: {
                 offset: data?.chats.length,
-                limit: 9,
+                limit: MESSAGES_PAGE_SIZE,
               },
             })
           }
