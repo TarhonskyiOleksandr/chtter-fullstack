@@ -7,8 +7,14 @@ import { useGetMe } from '@/entities';
 import type { Message as MessageType } from '@/shared/api/graphql/gql/graphql';
 import { useCountMessages } from '../hooks/useCountMessages';
 import InfiniteScroll from 'react-infinite-scroller';
+import { MESSAGES_PAGE_SIZE } from '@/shared/constatnts';
 
-const PAGE_SIZE = 10;
+const sortMessages = (messageA: MessageType, messageB: MessageType) => {
+  if (!messageA) return -1;
+  const chatACreatedAt = new Date(messageA.createdAt).getTime();
+  const chatBCreatedAt = new Date(messageB.createdAt).getTime();
+  return chatACreatedAt - chatBCreatedAt;
+};
 
 export const MessagesList = () => {
   const [messages, setMessages] = useState<MessageType[]>([]);
@@ -21,7 +27,7 @@ export const MessagesList = () => {
   } = useGetMessages({ 
     chatId: id!,
     offset: 0,
-    limit: PAGE_SIZE,
+    limit: MESSAGES_PAGE_SIZE,
   });
   const { data: meData } = useGetMe();
   const { messagesCount, countMessages } = useCountMessages(id!);
@@ -50,7 +56,7 @@ export const MessagesList = () => {
         fetchMore({
           variables: {
             offset: existingMessages?.messages.length,
-            limit: PAGE_SIZE,
+            limit: MESSAGES_PAGE_SIZE,
           },
         })
       }
@@ -59,29 +65,31 @@ export const MessagesList = () => {
       loader={<div className="p-4 text-center">Loading...</div>}
     >
       {
-        messages.map((message, index, self) => {
-          const currentDate = new Date(message.createdAt).toLocaleDateString('en-US');
-          const prevDate = self[index - 1]
-            ? new Date(self[index - 1].createdAt).toLocaleDateString('en-US')
-            : null;
+        [...messages]
+          .sort(sortMessages)
+          .map((message, index, self) => {
+            const currentDate = new Date(message.createdAt).toLocaleDateString('en-US');
+            const prevDate = self[index - 1]
+              ? new Date(self[index - 1].createdAt).toLocaleDateString('en-US')
+              : null;
 
-          const shouldShowDate = currentDate !== prevDate;
+            const shouldShowDate = currentDate !== prevDate;
 
-          return (
-            <div key={message._id}>
-              {shouldShowDate && (
-                <div className="flex justify-center mb-2">
-                  <time className="text-xs text-gray-400">{currentDate}</time>
-                </div>
-              )}
-              <Message
-                content={message.content}
-                isMyMessage={message.user._id === meData?.me._id}
-                createdAt={message.createdAt}
-              />
-            </div>
-          );
-        }).reverse()
+            return (
+              <div key={message._id}>
+                {shouldShowDate && (
+                  <div className="flex justify-center mb-2">
+                    <time className="text-xs text-gray-400">{currentDate}</time>
+                  </div>
+                )}
+                <Message
+                  content={message.content}
+                  isMyMessage={message.user._id === meData?.me._id}
+                  createdAt={message.createdAt}
+                />
+              </div>
+            );
+          })
       }
     </InfiniteScroll>
   );

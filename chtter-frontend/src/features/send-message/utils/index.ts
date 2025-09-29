@@ -9,7 +9,9 @@ export const updateMessages = (cache: ApolloCache<any>, message: Message) => {
   const query = {
     query: GET_MESSAGES,
     variables: { 
-      chatId: message.chatId 
+      chatId: message.chatId,
+      offset: 0,
+      limit: 10,
     },
   };
   const queryRes = cache.readQuery({ ...query });
