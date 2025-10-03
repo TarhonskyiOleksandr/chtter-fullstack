@@ -6,10 +6,15 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UsersRepository } from './users.repository';
 import { handleMongoError } from 'src/common/helpers';
+import { S3Service } from 'src/common/s3/s3.service';
+import { USERS_BUCKET } from './users.constants';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly users: UsersRepository) {}
+  constructor(
+    private readonly users: UsersRepository,
+    private readonly s3Sevice: S3Service,
+  ) {}
 
   private async hashPassword(password: string) {
     const hashedPassword = await argon2.hash(password);
@@ -67,5 +72,13 @@ export class UsersService {
       name: user.name,
       email: user.email,
     };
+  }
+
+  async uploadAvatar(file: Buffer, userId: string) {
+    await this.s3Sevice.upload({
+      bucket: USERS_BUCKET,
+      key: `${userId}.jpg`,
+      file,
+    });
   }
 }
