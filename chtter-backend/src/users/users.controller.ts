@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   FileTypeValidator,
   MaxFileSizeValidator,
@@ -18,21 +19,28 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtGuard)
   @Post('image')
+  @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor('file'))
   async uploadAvatar(
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new MaxFileSizeValidator({ maxSize: 100000 }),
-          new FileTypeValidator({ fileType: 'image/jpeg' }),
+          new MaxFileSizeValidator({ maxSize: 1_000_000 }),
+          new FileTypeValidator({
+            fileType: /^(image\/jpeg|image\/jpg|image\/png|image\/webp)$/,
+          }),
         ],
       }),
     )
     file: Express.Multer.File,
     @CurrentUser() user: JWTPayload,
   ) {
-    return this.usersService.uploadAvatar(file.buffer, user._id);
+    try {
+      return this.usersService.uploadAvatar(file.buffer, user._id);
+    } catch (err) {
+      console.error(err);
+      throw new BadRequestException('Upload failed');
+    }
   }
 }
