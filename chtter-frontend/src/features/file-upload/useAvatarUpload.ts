@@ -3,7 +3,7 @@ import type { UseFormSetError } from 'react-hook-form';
 import { client } from '@/shared/api/graphql';
 
 interface AvatarUploadReq {
-  file?: string | File | undefined;
+  file?: File | undefined;
 }
 
 export const useAvatarUpload = () => {
@@ -11,12 +11,14 @@ export const useAvatarUpload = () => {
     req: AvatarUploadReq,
     setError?: UseFormSetError<AvatarUploadReq>,
   ) => {
+    if (!req.file) return;
+    
     try {
       const formData = new FormData();
 
       if (req.file instanceof File) formData.append('file', req.file);
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/image`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/users/image`, {
         method: 'POST',
         credentials: 'include',
         body: formData,

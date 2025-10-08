@@ -1,13 +1,25 @@
 import { z } from 'zod';
 
+const MAX_FILE_SIZE = 1000000;
+const ACCEPTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+];
+
+const imageSchema = z.any().optional()
+  .refine((file) => {
+    if (!file) return true;
+    return ACCEPTED_IMAGE_TYPES.includes(file.type)
+  }, 'Invalid file. Choose JPEG, JPG, PNG or WEBP image')
+  .refine((file) => {
+    if (!file) return true;
+    return file.size <= MAX_FILE_SIZE;
+  }, 'Max file size allowed is 1MB.');
+
 export const settingsFormSchema = z.object({
-  file: z.custom<File>((file) => !file || file instanceof File, {
-      message: 'Only JPEG images are allowed',
-    }).refine((file) => !file || file.type === 'image/jpeg', {
-      message: 'Only JPEG images are allowed',
-    }).refine((file) => !file || file.size <= 100000, {
-      message: 'Max file size is 100KB',
-    }).optional(),
+  file: imageSchema,
 });
 
 export type SettingsFormSchema = z.infer<typeof settingsFormSchema>;

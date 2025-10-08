@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useGetMe } from "@/entities";
@@ -9,7 +9,7 @@ const ProfilePage = () => {
   const { data } = useGetMe();
   const { uploadAvatar } = useAvatarUpload();
   const {
-    register,
+    control,
     handleSubmit,
     clearErrors,
     setError,
@@ -19,7 +19,6 @@ const ProfilePage = () => {
   });
 
   const onHandleSubmit = (data: SettingsFormSchema) => {
-    console.log(data)
     clearErrors('root');
     uploadAvatar(data, setError);
   };
@@ -44,19 +43,23 @@ const ProfilePage = () => {
             {data?.me.email}
           </p>
           <form onSubmit={handleSubmit(onHandleSubmit)}>
-            <label className="btn btn-primary btn-sm w-full mb-2">
-              Change Avatar
-              <input
-                type="file"
-                accept="image/jpeg"
-                hidden
-                {...register('file', {
-                  setValueAs: (files: FileList) => files?.[0] || null,
-                })}
-              />
-            </label>
-            {errors.file && (
-              <p className="text-red-500 text-sm">{errors.file.message}</p>
+            <Controller
+              name="file"
+              control={control}
+              render={({ field }) => (
+                <label className="btn btn-primary btn-sm w-full">
+                  Change Avatar
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    hidden
+                    onChange={(e) => field.onChange(e.target.files?.[0] || null)}
+                  />
+                </label>
+              )}
+            />
+            {errors.file?.message && (
+              <p className="text-red-500 text-sm">{errors.file.message as string}</p>
             )}
             <button 
               className="btn btn-sm w-full"
