@@ -8,45 +8,51 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JWTPayload } from 'src/auth/types/jwt-payload.interface';
+import { Types } from 'mongoose';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+  async createUser(
+    @Args('createUserInput') createUserInput: CreateUserInput,
+  ): Promise<User> {
     return this.usersService.create(createUserInput);
   }
 
   @Query(() => [User], { name: 'users' })
   @UseGuards(GqlAuthGuard)
-  findAll() {
+  async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Query(() => User, { name: 'user', nullable: true })
   @UseGuards(GqlAuthGuard)
-  findOne(@Args('_id') _id: string) {
+  async findOne(@Args('_id') _id: string): Promise<User> {
     return this.usersService.findOne(_id);
   }
 
   @Mutation(() => User)
   @UseGuards(GqlAuthGuard)
-  updateUser(
+  async updateUser(
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
     @CurrentUser() user: JWTPayload,
-  ) {
+  ): Promise<User> {
     return this.usersService.update(user._id, updateUserInput);
   }
 
   @Mutation(() => User)
-  removeUser(@CurrentUser() user: JWTPayload) {
+  async removeUser(@CurrentUser() user: JWTPayload): Promise<User> {
     return this.usersService.remove(user._id);
   }
 
   @Query(() => User, { name: 'me' })
   @UseGuards(GqlAuthGuard)
-  getMe(@CurrentUser() user: JWTPayload) {
-    return user;
+  async getMe(@CurrentUser() user: JWTPayload): Promise<User> {
+    return {
+      ...user,
+      _id: new Types.ObjectId(user._id),
+    };
   }
 }

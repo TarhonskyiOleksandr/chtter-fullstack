@@ -5,24 +5,14 @@ import { CreateChatInput } from './dto/create-chat.input';
 import { UpdateChatInput } from './dto/update-chat.input';
 import { ChatsRepository } from './chats.repository';
 import { PaginationArgs } from 'src/common/dto/pagination-args';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ChatsService {
-  constructor(private readonly chatsRepository: ChatsRepository) {}
-
-  // currentUserChatFilter(userId: string) {
-  //   return {
-  //     $or: [
-  //       { userId },
-  //       {
-  //         userIds: {
-  //           $in: [userId],
-  //         },
-  //       },
-  //       { isPrivate: false },
-  //     ],
-  //   };
-  // }
+  constructor(
+    private readonly chatsRepository: ChatsRepository,
+    private readonly usersService: UsersService,
+  ) {}
 
   async create(createChatInput: CreateChatInput, userId: string) {
     return await this.chatsRepository.create({
@@ -66,7 +56,9 @@ export class ChatsService {
     chats.forEach((chat) => {
       if (!chat.latestMessage._id) return delete chat.latestMessage;
 
-      chat.latestMessage.user = chat.latestMessage.user[0];
+      chat.latestMessage.user = this.usersService.transformToEntity(
+        chat.latestMessage.user[0],
+      );
       delete chat.latestMessage.userId;
       chat.latestMessage.chatId = chat._id;
     });
