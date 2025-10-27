@@ -8,6 +8,8 @@ import { UsersRepository } from './users.repository';
 import { handleMongoError } from 'src/common/helpers';
 import { S3Service } from 'src/common/s3/s3.service';
 import { USERS_BUCKET } from './users.constants';
+import { UserDocument } from './entities/user.document';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -24,26 +26,30 @@ export class UsersService {
   async create(createUserInput: CreateUserInput) {
     try {
       const hashedPassword = await this.hashPassword(createUserInput.password);
-
-      return await this.users.create({
+      const userDocument = await this.users.create({
         ...createUserInput,
         password: hashedPassword,
       });
+
+      return this.transformToEntity(userDocument);
     } catch (err: any) {
       throw handleMongoError(err);
     }
   }
 
   async findAll() {
-    return await this.users.find({});
+    return (await this.users.find({})).map((user) =>
+      this.transformToEntity(user),
+    );
   }
 
   async findOne(_id: string) {
-    return this.users.findOne({ _id });
+    const user = await this.users.findOne({ _id });
+    return this.transformToEntity(user);
   }
 
   async update(_id: string, updateUserInput: UpdateUserInput) {
-    return this.users.findOneAndUpdate(
+    const updatedUser = await this.users.findOneAndUpdate(
       { _id },
       {
         $set: {
@@ -54,10 +60,14 @@ export class UsersService {
         },
       },
     );
+
+    return this.transformToEntity(updatedUser);
   }
 
   async remove(_id: string) {
-    return this.users.findOneAndDelete({ _id });
+    const deletedUser = await this.users.findOneAndDelete({ _id });
+
+    return this.transformToEntity(deletedUser);
   }
 
   async verifyUser(email: string, password: string) {
@@ -67,18 +77,32 @@ export class UsersService {
     if (!isPasswordMatch)
       throw new UnauthorizedException('Invalid credentials');
 
-    return {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-    };
+    return this.transformToEntity(user);
   }
 
   async uploadAvatar(file: Buffer, userId: string) {
     await this.s3Sevice.upload({
       bucket: USERS_BUCKET,
-      key: `${userId}.jpg`,
+      key: this.getUserAvatar(userId),
       file,
     });
+  }
+
+  transformToEntity(userDocument: UserDocument): User {
+    const avatar = this.s3Sevice.getObjectUrl(
+      USERS_BUCKET,
+      this.getUserAvatar(userDocument._id.toHexString()),
+    );
+    const user = {
+      ...userDocument,
+      avatar,
+    };
+    delete user.password;
+
+    return user;
+  }
+
+  getUserAvatar(userId: string) {
+    return `${userId}.jpg`;
   }
 }
