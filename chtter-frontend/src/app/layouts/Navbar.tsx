@@ -35,7 +35,10 @@ export const Navbar: React.FC = () => {
         <div className="flex-none">
           <div className="dropdown dropdown-end">
             <div tabIndex={0} className="cursor-pointer">
-              <Avatar name={ data?.me.name || ''} /> 
+              <Avatar 
+                name={ data?.me.name || ''}
+                avatar={data?.me.avatar}
+              /> 
             </div>
             <ul
               tabIndex={0}
