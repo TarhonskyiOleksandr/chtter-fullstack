@@ -75,10 +75,12 @@ export class MessagesService {
       { $set: { chatId } },
     ]);
 
-    return messages.map((message) => ({
-      ...message.user,
+    const messagesWithAuthor = messages.map((message) => ({
+      ...message,
       user: this.usersService.transformToEntity(message.user),
     }));
+
+    return messagesWithAuthor;
   }
 
   async messageCreated() {

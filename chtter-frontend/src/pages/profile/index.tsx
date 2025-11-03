@@ -30,8 +30,8 @@ const ProfilePage = () => {
           <div className="avatar mb-4">
             <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
               <img
-                src="https://placehold.co/150x150/png"
-                alt="User avatar"
+                src={data?.me.avatar || 'https://placehold.co/150x150/png'}
+                alt={`${data?.me.name}'s avatar`}
               />
             </div>
           </div>
