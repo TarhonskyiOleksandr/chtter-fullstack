@@ -14,4 +14,7 @@ export class CreateUserInput {
   // @IsStrongPassword()
   @MinLength(6)
   password: string;
+
+  @Field({ nullable: true })
+  avatar?: string;
 }

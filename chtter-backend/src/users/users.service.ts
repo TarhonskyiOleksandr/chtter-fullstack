@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import { verify } from 'argon2';
@@ -86,20 +87,18 @@ export class UsersService {
       key: this.getUserAvatar(userId),
       file,
     });
+
+    const avatar = await this.s3Sevice.getObjectUrl(
+      USERS_BUCKET,
+      this.getUserAvatar(userId),
+    );
+
+    await this.update(userId, { avatar });
   }
 
   transformToEntity(userDocument: UserDocument): User {
-    const avatar = this.s3Sevice.getObjectUrl(
-      USERS_BUCKET,
-      this.getUserAvatar(userDocument._id.toHexString()),
-    );
-    const user = {
-      ...userDocument,
-      avatar,
-    };
-    delete user.password;
-
-    return user;
+    const { password, ...rest } = userDocument;
+    return rest as User;
   }
 
   getUserAvatar(userId: string) {

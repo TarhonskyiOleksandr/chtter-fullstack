@@ -9,12 +9,17 @@ interface ChatListItemProps {
 }
 
 const ChatListItem = ({ chat, onClick, isActive }: ChatListItemProps) => {
+  const chatName = chat?.latestMessage?.user.name || chat.name!;
+
   return (
     <div
       onClick={() => onClick(chat._id)}
       className={`flex items-center gap-3 px-4 py-3 hover:bg-base-200 cursor-pointer ${isActive ? 'bg-base-200' : 'bg-transparent'}`}
     >
-      <Avatar name={chat.name!} />
+      <Avatar 
+        name={chatName} 
+        avatar={chat?.latestMessage?.user.avatar} 
+      />
       <div className="min-w-0">
         <p className="font-semibold truncate">{chat.name}</p>
         {
