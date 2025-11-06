@@ -1,6 +1,6 @@
 interface AvatarProps {
   name: string;
-  avatar?: string;
+  avatar?: string | null;
 }
 
 export const Avatar = ({ name, avatar }: AvatarProps) => {

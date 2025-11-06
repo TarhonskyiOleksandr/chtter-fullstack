@@ -10,6 +10,6 @@ export class User extends AbstractEntity {
   @Field()
   email: string;
 
-  @Field()
-  avatar: string;
+  @Field({ nullable: true })
+  avatar?: string;
 }

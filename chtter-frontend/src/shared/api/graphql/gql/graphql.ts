@@ -35,6 +35,7 @@ export type CreateMessageInput = {
 };
 
 export type CreateUserInput = {
+  avatar?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -139,6 +140,7 @@ export type UpdateChatInput = {
 };
 
 export type UpdateUserInput = {
+  avatar?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
@@ -147,7 +149,7 @@ export type UpdateUserInput = {
 export type User = {
   __typename?: 'User';
   _id: Scalars['ID']['output'];
-  avatar: Scalars['String']['output'];
+  avatar?: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
   name: Scalars['String']['output'];
 };
@@ -157,12 +159,12 @@ export type ChatQueryVariables = Exact<{
 }>;
 
 
-export type ChatQuery = { __typename?: 'Query', chat: { __typename?: 'Chat', _id: string, name: string, latestMessage?: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar: string } } | null } };
+export type ChatQuery = { __typename?: 'Query', chat: { __typename?: 'Chat', _id: string, name: string, latestMessage?: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar?: string | null } } | null } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', _id: string, name: string, email: string, avatar: string } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', _id: string, name: string, email: string, avatar?: string | null } };
 
 export type MessagesQueryVariables = Exact<{
   chatId: Scalars['String']['input'];
@@ -171,14 +173,14 @@ export type MessagesQueryVariables = Exact<{
 }>;
 
 
-export type MessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar: string } }> };
+export type MessagesQuery = { __typename?: 'Query', messages: Array<{ __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar?: string | null } }> };
 
 export type CreateChatMutationVariables = Exact<{
   createChatInput: CreateChatInput;
 }>;
 
 
-export type CreateChatMutation = { __typename?: 'Mutation', createChat: { __typename?: 'Chat', _id: string, name: string, latestMessage?: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar: string } } | null } };
+export type CreateChatMutation = { __typename?: 'Mutation', createChat: { __typename?: 'Chat', _id: string, name: string, latestMessage?: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar?: string | null } } | null } };
 
 export type CreateUserMutationVariables = Exact<{
   createUserInput: CreateUserInput;
@@ -193,27 +195,27 @@ export type ChatsQueryVariables = Exact<{
 }>;
 
 
-export type ChatsQuery = { __typename?: 'Query', chats: Array<{ __typename?: 'Chat', _id: string, name: string, latestMessage?: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar: string } } | null }> };
+export type ChatsQuery = { __typename?: 'Query', chats: Array<{ __typename?: 'Chat', _id: string, name: string, latestMessage?: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar?: string | null } } | null }> };
 
 export type CreateMessageMutationVariables = Exact<{
   createMessageInput: CreateMessageInput;
 }>;
 
 
-export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar: string } } };
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar?: string | null } } };
 
 export type MessageCreatedSubscriptionVariables = Exact<{
   chatIds: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
 
 
-export type MessageCreatedSubscription = { __typename?: 'Subscription', messageCreated: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar: string } } };
+export type MessageCreatedSubscription = { __typename?: 'Subscription', messageCreated: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar?: string | null } } };
 
-export type ChatFragmentFragment = { __typename?: 'Chat', _id: string, name: string, latestMessage?: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar: string } } | null };
+export type ChatFragmentFragment = { __typename?: 'Chat', _id: string, name: string, latestMessage?: { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar?: string | null } } | null };
 
-export type MessageFragmentFragment = { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar: string } };
+export type MessageFragmentFragment = { __typename?: 'Message', _id: string, content: string, createdAt: any, chatId: string, user: { __typename?: 'User', _id: string, name: string, email: string, avatar?: string | null } };
 
-export type UserFragmentFragment = { __typename?: 'User', _id: string, name: string, email: string, avatar: string };
+export type UserFragmentFragment = { __typename?: 'User', _id: string, name: string, email: string, avatar?: string | null };
 
 export const UserFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}}]}}]} as unknown as DocumentNode<UserFragmentFragment, unknown>;
 export const MessageFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Message"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"chatId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"UserFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}}]}}]} as unknown as DocumentNode<MessageFragmentFragment, unknown>;
