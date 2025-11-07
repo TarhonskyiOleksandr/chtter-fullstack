@@ -3,14 +3,16 @@ frontend:
   phases:
     preBuild:
       commands:
+        - cd chtter-frontend
         - yarn install
     build:
       commands:
+        - cd chtter-frontend
         - yarn build
   artifacts:
-    baseDirectory: /chtter-frontend/dist
+    baseDirectory: chtter-frontend/dist
     files:
-      - "**/*"
+      - '**/*'
   cache:
-    paths: 
-      - /chtter-frontend/node_modules/**/*
+    paths:
+      - chtter-frontend/node_modules/**/* 
