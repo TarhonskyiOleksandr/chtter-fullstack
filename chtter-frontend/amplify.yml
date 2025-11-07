@@ -1,18 +1,18 @@
 version: 1
-frontend:
-  phases:
-    preBuild:
-      commands:
-        - cd chtter-frontend
-        - yarn install
-    build:
-      commands:
-        - cd chtter-frontend
-        - yarn build
-  artifacts:
-    baseDirectory: chtter-frontend/dist
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - chtter-frontend/node_modules/**/* 
+applications:
+  - appRoot: chtter-frontend
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - yarn install
+        build:
+          commands:
+            - yarn build
+      artifacts:
+        baseDirectory: dist
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/* 
