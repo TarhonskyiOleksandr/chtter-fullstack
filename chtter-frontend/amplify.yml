@@ -9,7 +9,7 @@ frontend:
       commands:
         - yarn build
   artifacts:
-    baseDirectory: /dist
+    baseDirectory: chtter-frontend/dist
     files:
       - '**/*'
   cache:
