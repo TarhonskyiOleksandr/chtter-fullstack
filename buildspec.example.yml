@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - corepack enable
+      - corepack prepare pnpm@latest --activate
+      - cd chtter-backend
+      - pnpm install --frozen-lockfile
+
+  build:
+    commands:
+      - pnpm run build
+
+artifacts:
+  base-directory: chtter-backend
+  files:
+    - dist/**/*
+    - package.json
+    - pnpm-lock.yaml
