@@ -7,8 +7,7 @@ phases:
     commands:
       - corepack enable
       - corepack prepare pnpm@latest --activate
-      - cd chtter-backend
-      - pnpm install --frozen-lockfile
+      - pnpm install
 
   build:
     commands:
