@@ -23,4 +23,7 @@ phases:
 artifacts:
   base-directory: chtter-backend
   files:
-    - /**/*       
+    - dist/**/*
+    - node_modules/**/*
+    - package.json
+    - Procfile
