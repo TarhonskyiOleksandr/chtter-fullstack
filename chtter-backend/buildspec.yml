@@ -23,7 +23,4 @@ phases:
 artifacts:
   base-directory: chtter-backend
   files:
-    - dist/**/*       
-    - package.json    
-    - pnpm-lock.yaml    
-    - Procfile 
+    - /**/*       
