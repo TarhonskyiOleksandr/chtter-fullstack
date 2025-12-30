@@ -11,7 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   const configService = app.get(ConfigService);
-  const port = configService.getOrThrow('PORT');
+  const port = configService.get('PORT') || 8080;
 
   app.enableCors({
     origin: process.env.CLIENT_URL,
@@ -31,7 +31,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
 }
 
 bootstrap();
