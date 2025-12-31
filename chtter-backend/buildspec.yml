@@ -14,7 +14,7 @@ phases:
   
   pre_build:
     commands:
-      - pnpm install --unsafe-perm
+      - pnpm install --frozen-lockfile
 
   build:
     commands:
