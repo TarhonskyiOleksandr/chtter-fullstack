@@ -2,16 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { altairExpress } from 'altair-express-middleware';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
-
-  const configService = app.get(ConfigService);
-  const port = configService.get('PORT') || 8080;
 
   app.enableCors({
     origin: process.env.CLIENT_URL,
@@ -31,7 +27,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(port, '0.0.0.0');
+  await app.listen(8080, '0.0.0.0');
 }
 
 bootstrap();
