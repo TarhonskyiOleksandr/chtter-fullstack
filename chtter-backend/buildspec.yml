@@ -14,7 +14,7 @@ phases:
   
   pre_build:
     commands:
-      - pnpm install
+      - pnpm install --unsafe-perm
 
   build:
     commands:
