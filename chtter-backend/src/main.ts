@@ -30,6 +30,8 @@ async function bootstrap() {
   );
 
   await app.listen(port, '0.0.0.0');
+
+  console.log('App started on port', port);
 }
 
 bootstrap();
