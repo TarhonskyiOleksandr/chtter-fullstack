@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { PutObjectCommand, S3Client, S3ClientConfig } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
@@ -12,15 +12,19 @@ export class S3Service {
   constructor(private readonly configService: ConfigService) {
     const accessKeyId = configService.get('AWS_ADMIN_ACCESS_KEY');
     const secretAccessKey = configService.get('AWS_ADMIN_SECRET_KEY');
-    this.region = configService.getOrThrow('AWS_REGION');
+    this.region = configService.get('AWS_REGION') ?? 'us-east-1';
 
-    this.client = new S3Client({
-      region: this.region,
-      credentials:
-        accessKeyId && secretAccessKey
-          ? { accessKeyId, secretAccessKey }
-          : undefined,
-    });
+    const clientConfig: S3ClientConfig = {};
+
+    if (accessKeyId && secretAccessKey) {
+      clientConfig.region = this.region;
+      clientConfig.credentials = {
+        accessKeyId,
+        secretAccessKey,
+      };
+    }
+
+    this.client = new S3Client(clientConfig);
   }
 
   async upload({ bucket, key, file }: FileUploadOptions) {
@@ -34,6 +38,7 @@ export class S3Service {
   }
 
   getObjectUrl(bucket: string, key: string) {
-    return `https://${bucket}.s3.${this.region}.amazonaws.com/${key}`;
+    const region = this.client.config.region;
+    return `https://${bucket}.s3.${region}.amazonaws.com/${key}`;
   }
 }

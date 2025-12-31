@@ -9,6 +9,8 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
+  const port = process.env.PORT || 8080;
+
   app.enableCors({
     origin: process.env.CLIENT_URL,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -27,7 +29,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(8080, '0.0.0.0');
+  await app.listen(port, '0.0.0.0');
 }
 
 bootstrap();
